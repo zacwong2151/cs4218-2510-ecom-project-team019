@@ -1,66 +1,72 @@
 # CS4218 Project - Virtual Vault
 
-## MS1 Workload / Contribution (Unit Tests)
+Virtual Vault is a full-stack MERN (MongoDB, Express.js, React.js, Node.js) e-commerce website. My task was to extensively test the written code
 
-| Contributor      | Module / Feature                                                                                                                                                                                                      |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Zacharias Wong   | Order.js, authController.js (updateProfileController, getOrdersController, getAllOrdersController, orderStatusController), orderModel.js, productController.js (braintreeTokenController, brainTreePaymentController) |
-| Tiong Meng Sheng | auth.js, Register.js, Login.js, authHelper.js, authMiddleware.js, authController.js (registerController, loginController, forgotPasswordController, testController)                                                   |
-| Wong Ja Yee      | Categories.js, CreateCategory.js, CategoryForm.js, useCategory.js, categoryController.js                                                                                                                              |
-| Brendan Koh      | productController.js (all except braintreeTokenController, braintreePaymentController), CategoryProduct.js, Products.js, UpdateProduct.js, CreateProduct.js, ProductDetails.js, productModel.js                       |
+## Unit Test (Jest)
 
-## MS2 Workload / Contribution (Integration and UI Tests)
+Jest was used to write and run unit tests to ensure individual components and functions work as expected, finding and fixing bugs in the process
+- Key concepts to write good unit tests:
+  - Identify all external dependencies and mock them
+  - Use the AAA (Arrange, Act, Assert) methodology to write clean and maintainable tests
+- My unit test contributions:
+  - `Order.js`, `orderModel.js`
+  - authController.js (`updateProfileController`, `getOrdersController`, `getAllOrdersController`, `orderStatusController`)
+  - productController.js (`braintreeTokenController`, `brainTreePaymentController`)
 
-| Contributor      | Module / Feature                                                                                                                                                                                                      |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Zacharias Wong   | UI tests: HomePage, DashboardOrder, Profile, Orders. Integration tests: authController.js (updateProfileController, getOrdersController, getAllOrdersController, orderStatusController), orderModel.js, productController.js (braintreeTokenController, brainTreePaymentController)  |
-| Tiong Meng Sheng | UI tests: Register.js, Login.js. Integration tests: authHelper.js, authMiddleware.js, authController.js (registerController, loginController, forgotPasswordController)                                                   |
-| Wong Ja Yee      | categoryController.integration.test.js, CategoryFormTest.spec.ts and CategoryPageTest.spec.ts (All Categories Page, Categories Dropdown, Create Category Form, Category CRUD)                                                                                                                                      |
-| Brendan Koh      | productController.integration.test.js (excl. braintree), productRoutes.integration.test.js, categoryProductControllers.integration.test.js, ProductPageTest.spec.ts, Reusable Playwright environment setup (db.js)    |
+<br>
 
-## 1. Project Introduction
+## Integration Test (Jest and Supertest)
 
-Virtual Vault is a full-stack MERN (MongoDB, Express.js, React.js, Node.js) e-commerce website, offering seamless connectivity and user-friendly features. The platform provides a robust framework for online shopping. The website is designed to adapt to evolving business needs and can be efficiently extended.
+Jest was used to test the integration between multiple application components (models, controllers, and routes) while maintaining isolation from external dependencies. The npm Supertest library was used to verify the correctness and reliability of the HTTP server’s API endpoints
+- Key concepts to write good integration tests:
+  - To test interaction with a database, fake the database (in the case of Mongo, use an in-memory Mongo instance)
+  - External APIs/libraries should be mocked, because it is expected that they are already thoroughly tested by their maintainers
+- My integration test contributions:
+  - authController.js (`updateProfileController`, `getOrdersController`, `getAllOrdersController`, `orderStatusController`), `orderModel.js`
+  - productController.js (`braintreeTokenController`, `brainTreePaymentController`)
+- My Supertest contributions:
+  - authRoutes.integration.test.js (`updateProfileController`, `getOrdersController`, `getAllOrdersController`, `orderStatusController`)
+  - productRoutes.integration.test.js (`braintreeTokenController`, `brainTreePaymentController`)
 
-## 2. Website Features
+<br>
 
--   **User Authentication**: Secure user authentication system implemented to manage user accounts and sessions.
--   **Payment Gateway Integration**: Seamless integration with popular payment gateways for secure and reliable online transactions.
--   **Search and Filters**: Advanced search functionality and filters to help users easily find products based on their preferences.
--   **Product Set**: Organized product sets for efficient navigation and browsing through various categories and collections.
+## E2E Test (Playwright)
+Playwright was used for UI testing to validate the behavior and appearance of the website's user interface
+- My E2E test contributions:
+  - `HomePage.e2e.test.js`, `Dashboard.e2e.test.js`, `Orders.e2e.test.js`, `Profile.e2e.test.js`
 
-## 3. Your Task
+<br>
 
--   **Unit and Integration Testing**: Utilize Jest for writing and running tests to ensure individual components and functions work as expected, finding and fixing bugs in the process.
--   **UI Testing**: Utilize Playwright for UI testing to validate the behavior and appearance of the website's user interface.
--   **Code Analysis and Coverage**: Utilize SonarQube for static code analysis and coverage reports to maintain code quality and identify potential issues.
--   **Load Testing**: Leverage JMeter for load testing to assess the performance and scalability of the ecommerce platform under various traffic conditions.
+## Performance Test (JMeter, Grafana, InfluxDB)
+Apache JMeter was used for load testing to assess the performance and scalability of the ecommerce platform under various traffic conditions. In particular, I conducted 2 types of load tests on the payment endpoints:
+  - Capacity testing: to determine the maximum number of concurrent users the system can handle before user experience begins to degrade
+  - Soak testing: to evaluate the application’s stability and resource utilization over an extended period under sustained load
 
-## 4. Setting Up The Project
+My tech set up:
+  - **Apache JMeter**: to simulate a large number of concurrent users to assess how well the application performs under heavy load
+  - **Telegraf**: to collect metrics like CPU or memory utilisation from the dockerised application and push the metrics to InfluxDB
+  - **InfluxDB**: to collect and store time-series metrics from Telegraf and JMeter
+  - **Grafana**: to visualize the metrics stored in InfluxDB through dynamic dashboards, enabling real-time monitoring and trend analysis
 
-### 1. Installing Node.js
+Given this set up, I was able to visualise the state of the application **in real time**, allowing me to detect anomalies quickly and correlate metrics visually 
 
-1. **Download and Install Node.js**:
+![Alt text](/images/Grafana.png)
+<i>Results of a 4 hour soak test displayed on Grafana</i>
 
-    - Visit [nodejs.org](https://nodejs.org) to download and install Node.js.
+<br>
 
-2. **Verify Installation**:
-    - Open your terminal and check the installed versions of Node.js and npm:
-        ```bash
-        node -v
-        npm -v
-        ```
+## Static Code Analysis (SonarQube)
+SonarQube was used for static code analysis and coverage reports to maintain code quality and identify potential issues
 
-### 2. MongoDB Setup
+<br>
 
-1. **Download and Install MongoDB Compass**:
+## Setting Up The Project
 
-    - Visit [MongoDB Compass](https://www.mongodb.com/products/tools/compass) and download and install MongoDB Compass for your operating system.
+1. **Download and Install Node.js**
 
-2. **Create a New Cluster**:
+2. **Create a new MongoDB Cluster**:
 
-    - Sign up or log in to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register).
-    - After logging in, create a project and within that project deploy a free cluster.
+    - Create a project in MongoDB Atlas and within that project deploy a free cluster.
 
 3. **Configure Database Access**:
 
@@ -72,30 +78,10 @@ Virtual Vault is a full-stack MERN (MongoDB, Express.js, React.js, Node.js) e-co
     - Go to "Network Access" under "Security" and whitelist your IP address to allow access from your machine.
     - For example, you could whitelist 0.0.0.0 to allow access from anywhere for ease of use.
 
-5. **Connect to the Database**:
 
-    - In your cluster's page on MongoDB Atlas, click on "Connect" and choose "Compass".
-    - Copy the connection string.
+## Application Setup
 
-6. **Establish Connection with MongoDB Compass**:
-    - Open MongoDB Compass on your local machine, paste the connection string (replace the necessary placeholders), and establish a connection to your cluster.
-
-### 3. Application Setup
-
-To download and use the MERN (MongoDB, Express.js, React.js, Node.js) app from GitHub, follow these general steps:
-
-1. **Clone the Repository**
-
-    - Go to the GitHub repository of the MERN app.
-    - Click on the "Code" button and copy the URL of the repository.
-    - Open your terminal or command prompt.
-    - Use the `git clone` command followed by the repository URL to clone the repository to your local machine:
-        ```bash
-        git clone <repository_url>
-        ```
-    - Navigate into the cloned directory.
-
-2. **Install Frontend and Backend Dependencies**
+1. **Install Frontend and Backend Dependencies**
 
     - Run the following command in your project's root directory:
 
@@ -112,17 +98,17 @@ To download and use the MERN (MongoDB, Express.js, React.js, Node.js) app from G
 
 4. **Adding sample data to database**
 
-    - Download “Sample DB Schema” from Canvas and extract it.
+    - Download “Sample DB Schema” from Canvas (if applicable) and extract it.
     - In MongoDB Compass, create a database named `test` under your cluster.
     - Add four collections to this database: `categories`, `orders`, `products`, and `users`.
     - Under each collection, click "ADD DATA" and import the respective JSON from the extracted "Sample DB Schema".
 
 5. **Running the Application**
-    - Open your web browser.
     - Use `npm run dev` to run the app from root directory, which starts the development server.
     - Navigate to `http://localhost:3000` to access the application.
 
-### 4. Setting up SonarQube
+
+## Setting up SonarQube
 
 SonarQube consists of 2 parts:
 
@@ -135,10 +121,10 @@ To download and link SonarQube to this project, follow the following steps:
 
 1. **Download and run SonarQube**
 
--   Download the zip file from `https://docs.sonarsource.com/sonarqube-server/server-installation/from-zip-file/basic-installation`
+-   Download the zip file from https://docs.sonarsource.com/sonarqube-server/server-installation/from-zip-file/basic-installation
 -   Make sure you have JDK17 installed
 -   Unzip the zip file (if using WSL, please unzip it in your linux directory)
--   Run the `sonar.sh`, details of where it is found -> `https://docs.sonarsource.com/sonarqube-server/server-installation/from-zip-file/starting-stopping-server/from-zip-file`
+-   Run the `sonar.sh`, details of where it is found -> https://docs.sonarsource.com/sonarqube-server/server-installation/from-zip-file/starting-stopping-server/from-zip-file
 
 2. **Set up SonarQube**
 
@@ -160,25 +146,16 @@ To download and link SonarQube to this project, follow the following steps:
 
 -   Execute `sonar.sh stop`
 
-## 5. Unit Testing with Jest
 
-Unit testing is a crucial aspect of software development aimed at verifying the functionality of individual units or components of a software application. It involves isolating these units and subjecting them to various test scenarios to ensure their correctness.  
-Jest is a popular JavaScript testing framework widely used for unit testing. It offers a simple and efficient way to write and execute tests in JavaScript projects.
-
-### Getting Started with Jest
-
-To begin unit testing with Jest in your project, follow these steps:
+## Unit Testing with Jest
 
 1. **Install Jest**:  
-   Use your preferred package manager to install Jest. For instance, with npm:
-
     ```bash
     npm install --save-dev jest
 
     ```
 
 2. **Write Tests**  
-   Create test files for your components or units where you define test cases to evaluate their behaviour.
 
 3. **Run Tests**  
    Execute your tests using Jest to ensure that your components meet the expected behaviour.  
@@ -200,3 +177,65 @@ To begin unit testing with Jest in your project, follow these steps:
         ```bash
         npm run test
         ```
+
+
+## Installing JMeter
+- Download and extract the latest binary from https://jmeter.apache.org/download_jmeter.cgi
+- Ensure that you have JDK installed correctly
+  - Check that it is in your path with `java –version`
+- Run the respective script under the bin directory to launch jmeter
+  - `jmeter` (linux)
+
+## JMeter basics
+- `Thread group` -> thread group is where you specify the details of your performance test
+- `Ramp up period` -> refers to the time JMeter will taken to spawn the threads. So if ramp up period = 1s, JMeter will spawn all the threads in 1s
+- `Loop count` -> how many times you want each thread to do the actions that you specify. If your action is assessing a simple endpoint, then loop count refers to the number of times each thread will assess the endpoint. Can be set to infinite
+- `Server Name or IP` -> for this field, you dont put any `:` or `/`
+- `Default config element` -> since we are gonna do multiple HTTP requests, we can add a default config element. Under `Server Name or IP`, you can add the the target endpoint base URL e.g. `localhost`. This is so that in the individual http request sampler, we only need to specifiy the path (base URL is already included)
+- `Samplers` -> refers to whatever endpoint you want to hit (we use HTTP Request). You specify the path under the 'Path' field
+- `Listener` -> after setting up your thread group, the last thing we want to do is to listen to the results. Add a 'Aggregate Graph' listener. Here, we can see the average response time, median response time etc.
+
+## Installing Grafana, InfluxDB, and Telegraf
+- Just find them on the respective websites and run them with the commands below
+
+## Dockerise the ecommerce application
+- Build the Docker image 
+```
+docker build -t cs4218-monolith:dev .
+```
+- Launch the container
+  - `--env-file .env` -> loads your environment variables (DB URI, JWT_SECRET, etc) into the container
+  - `-p 3000:3000 -p 6060:6060` -> maps host ports to container ports
+  - `-d` -> runs in detached mode
+  - `--cpus="2.0" --memory="4g"` -> limit the container's resources to emulate a cloud VM environment
+```
+docker run -d --name cs4218-monolith --cpus="2.0" --memory="4g" --env-file .env -p 3000:3000 -p 6060:6060 cs4218-monolith:dev
+```
+
+## Connecting the platforms
+- Connect Jmeter to InfluxDB by putting a backend listener connection on Jmeter, which points to the InfluxDB bucket (InfluxDB will store metrics like response time and throughput from JMeter)
+- Connect Grafana to InfluxDB by adding a new connection in Grafana to http://localhost:8086
+- Get Telegraf to read inputs from docker and output to InfluxDB by editing the `telegraf.conf ` file (located in `/etc/telegraf/` directory)
+  - Details in: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/docker
+  - InfluxDB will store metrics like CPU usage percent and memory utilisation from Telegraf
+
+## Commands for Granafa, InfluxDB, Telegraf
+- start `grafana`: sudo systemctl start grafana-server (by default, web app will open on http://localhost:3000)
+- verify `grafana` running: sudo systemctl status grafana-server
+- stop `grafana`: sudo systemctl stop grafana-server
+- start `influxDB`: sudo service influxdb start (by default, web app will open on http://localhost:8086)
+- check `influxDB` status: sudo service influxdb status
+- stop `influxDB`: sudo systemctl stop influxdb
+- start `telegraf`: sudo systemctl start telegraf
+- verify `telegraf `running: sudo systemctl status telegraf
+- restart `telegraf`: sudo systemctl restart telegraf
+
+## Run JMeter in non-gui mode
+- `-n`: CLI mode
+- `-t`: path to test file
+- `-l`: log directory
+- `-e`: tells jmeter to create a report
+- `-o`: specify path to report directory
+```
+./jmeter -n -t "<path to jmx file>" -l "<path to where your logs will be stored>" -e -o "<path to where your web report will be stored>"
+```

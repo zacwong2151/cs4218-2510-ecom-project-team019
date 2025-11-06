@@ -11,7 +11,7 @@ dotenv.config();
 
 //payment gateway
 export const gateway = new braintree.BraintreeGateway({
-    environment: braintree.Environment.Sandbox,
+    environment: braintree.Environment.Sandbox, // Every request goes to Braintree’s sandbox servers, not the real production payment system
     merchantId: process.env.BRAINTREE_MERCHANT_ID,
     publicKey: process.env.BRAINTREE_PUBLIC_KEY,
     privateKey: process.env.BRAINTREE_PRIVATE_KEY,
@@ -380,15 +380,17 @@ export const productCategoryController = async (req, res) => {
     }
 };
 
-//payment gateway api
-//token
+// Generates a client token so your frontend can securely collect card info
 export const braintreeTokenController = async (req, res) => {
     try {
         gateway.clientToken.generate({}, function (err, response) {
             if (err) {
                 res.status(500).json({ ok: false, error: err });
             } else {
-                res.json({ ok: true });
+                res.json({
+                    ok: true ,
+                    clientToken: response.clientToken
+                });
             }
         });
     } catch (error) {
@@ -396,7 +398,7 @@ export const braintreeTokenController = async (req, res) => {
     }
 };
 
-//payment
+// Creates a transaction using user's card info (via a payment nonce)
 export const brainTreePaymentController = async (req, res) => {
     try {
         const { nonce, cart } = req.body;
