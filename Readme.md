@@ -199,11 +199,11 @@ To download and link SonarQube to this project, follow the following steps:
 - Just find them on the respective websites and run them with the commands below
 
 ## Dockerise the ecommerce application
-- Build the Docker image 
+- Build the Docker image (example command)
 ```
 docker build -t cs4218-monolith:dev .
 ```
-- Launch the container
+- Launch the container (example command)
   - `--env-file .env` -> loads your environment variables (DB URI, JWT_SECRET, etc) into the container
   - `-p 3000:3000 -p 6060:6060` -> maps host ports to container ports
   - `-d` -> runs in detached mode
@@ -214,8 +214,9 @@ docker run -d --name cs4218-monolith --cpus="2.0" --memory="4g" --env-file .env 
 
 ## Connecting the platforms
 - Connect Jmeter to InfluxDB by putting a backend listener connection on Jmeter, which points to the InfluxDB bucket (InfluxDB will store metrics like response time and throughput from JMeter)
+  - The InfluxDB URL in the backend listener is `http://localhost:8086/api/v2/write?org=<your_org_name>&bucket=<your_bucket_name>`
 - Connect Grafana to InfluxDB by adding a new connection in Grafana to http://localhost:8086
-- Get Telegraf to read inputs from docker and output to InfluxDB by editing the `telegraf.conf ` file (located in `/etc/telegraf/` directory)
+- Get Telegraf to read inputs from docker and output to InfluxDB by editing the `telegraf.conf` file (located in `/etc/telegraf/` directory)
   - Details in: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/docker
   - InfluxDB will store metrics like CPU usage percent and memory utilisation from Telegraf
 
@@ -237,5 +238,5 @@ docker run -d --name cs4218-monolith --cpus="2.0" --memory="4g" --env-file .env 
 - `-e`: tells jmeter to create a report
 - `-o`: specify path to report directory
 ```
-./jmeter -n -t "<path to jmx file>" -l "<path to where your logs will be stored>" -e -o "<path to where your web report will be stored>"
+./jmeter -n -t "<path to jmx file>" -l "<path-to-where-your-logs-will-be-stored>" -e -o "<path-to-where-your-web-report-will-be-stored>"
 ```
